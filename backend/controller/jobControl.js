@@ -95,8 +95,25 @@ exports.applyForJob = async (req, res) => {
 // Calculate score based on job criteria and student profile
 const calculateScore = (criteria, profile) => {
     let score = 0;
+    
+    // Check if profile skills match criteria skills
     if (profile.skills.some(skill => criteria.skills.includes(skill))) score += 20;
+
+    // Check if profile experience meets or exceeds criteria
     if (profile.experience >= criteria.minExperience) score += 30;
-    if (profile.education === criteria.education) score += 50;
+
+    // Check if profile education matches criteria
+    if (profile.education === criteria.education) score += 30;
+
+    // Check if profile location matches criteria or if criteria location is "Any"
+    if (criteria.location === "Any" || profile.location === criteria.location) {
+        score += 10; // Add location score
+    }
+
+    if (criteria.college === "Any" || profile.college === criteria.college) {
+        score += 10; // Add location score
+    }
+
     return score;
 };
+

@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
     skills: [String],
     experience: Number,
     education: String,
+    location:String,
+    College:String,
     // Additional profile fields...
   },
   appliedJobs: [{
@@ -19,7 +21,8 @@ const userSchema = new mongoose.Schema({
 appliedInternships: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Internship',
-}],
+}]
+,
   company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' } // For HR role
 });
 

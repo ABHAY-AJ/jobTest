@@ -7,6 +7,8 @@ const jobSchema = new mongoose.Schema({
       skills: [String],
       minExperience: Number,
       education: String,
+      location: {type:String, default:"Any"},
+      College:{type:String, default:"Any"},
       // Additional criteria...
     },
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to HR
