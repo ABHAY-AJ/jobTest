@@ -12,17 +12,26 @@ const userSchema = new mongoose.Schema({
     education: String,
     location:String,
     College:String,
+    dateOfBirth: { type: Date},
+    academicPercentage: { type: Number},
     // Additional profile fields...
   },
   appliedJobs: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Job',
 }],
+appliedTpoJobs: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'tpoJob',
+}],
 appliedInternships: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Internship',
-}]
-,
+}],
+appliedTpoInternships: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'tpoInternship',
+}],
   company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' } // For HR role
 });
 

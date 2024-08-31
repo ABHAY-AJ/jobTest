@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
-const jobSchema = new mongoose.Schema({
+const internshipSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: String,
+    duration:Number,
     criteria: {
       skills: [String],
       minExperience: Number,
@@ -11,14 +12,16 @@ const jobSchema = new mongoose.Schema({
       College:{type:[String], default:"Any"},
       dateOfBirth: { type: Date },
       academicPercentage: { type: Number },
+      cgp:Number,
       // Additional criteria...
     },
+    duration: {
+      type: String,
+      required:true
+    }
+    ,
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to HR
-    applications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Application' }]
+    tpoApplications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tpoApplication' }]
   });
-  
- 
-  
-  module.exports = mongoose.model('Job', jobSchema)
-  ;
-  
+
+  module.exports = mongoose.model('tpoInternship', internshipSchema);

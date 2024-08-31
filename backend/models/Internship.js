@@ -3,12 +3,15 @@ const mongoose = require("mongoose");
 const internshipSchema = new mongoose.Schema({
     title: { type: String, required: true },
     description: String,
+    duration:Number,
     criteria: {
       skills: [String],
       minExperience: Number,
       education: String,
       location: {type:String, default:"Any"},
-      College:{type:String, default:"Any"},
+      College:{type:[String], default:"Any"},
+      dateOfBirth: { type: Date },
+      academicPercentage: { type: Number },
       // Additional criteria...
     },
     duration: {

@@ -7,18 +7,19 @@ const jobSchema = new mongoose.Schema({
       skills: [String],
       minExperience: Number,
       education: String,
-      location: {type:String, default:"Any"},
-      College:{type:[String], default:"Any"},
+      location: {type:[String], 
+        default:"Any"},
+      College:{type:String, default:"Any"},
       dateOfBirth: { type: Date },
       academicPercentage: { type: Number },
+      branch:String,
       // Additional criteria...
     },
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to HR
-    applications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Application' }]
+    tpoApplications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tpoApplication' }]
   });
   
  
   
-  module.exports = mongoose.model('Job', jobSchema)
-  ;
+  module.exports = mongoose.model('tpoJob', jobSchema);
   

@@ -1,7 +1,7 @@
 const Job = require('../models/Job');
 const Internship = require('../models/Internship');
 const User = require('../models/User');
-const Application = require('../models/Application');
+const tpoApplication = require('../models/tpoApplication');
 
 
 // Apply for a job
@@ -44,7 +44,9 @@ exports.getAppliedJobsAndInternships = async (req, res) => {
     try {
         const user = await User.findOne(req.user._id)
             .populate('appliedJobs')
-            .populate('appliedInternships');
+            .populate('appliedTpoJobs')
+            .populate('appliedInternships')
+            .populate('appliedTpoInternships');
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'Student profile not found' });
@@ -66,9 +68,9 @@ exports.getStudentApplications = async (req, res) => {
         const studentId = req.user._id;
 
         // Find applications made by this student
-        const applications = await Application.find({ student: studentId })
-            .populate('job')
-            .populate('internship')
+        const applications = await tpoApplication.find({ student: studentId })
+            .populate('tpoJob')
+            .populate('tpoInternship')
             .exec();
 
         res.status(200).json({ applications });
