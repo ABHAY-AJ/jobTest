@@ -1,7 +1,6 @@
 const Internship = require('../models/Internship');
 const Application = require('../models/Application');
 const User = require('../models/User');
-const Job = require('../models/Job');
 
 // Create a new internship
 exports.createInternship = async (req, res) => {
@@ -38,19 +37,9 @@ exports.getInternshipById = async (req, res) => {
 // Update an internship by ID
 exports.updateInternship = async (req, res) => {
     try {
-        const internship = await Internship.findById(req.params.id);
-        if (!job) return res.status(404).json({ success: false, message: 'internship not found' });
-
-        const createdAt = new Date(internship.createdAt);
-        const now = new Date();
-        const timeDifference = (now - createdAt) / (1000 * 60 * 60); // Convert milliseconds to hours
-
-        if (timeDifference > 2) {
-            return res.status(403).json({ success: false, message: 'You can only update the internship within 2 hours of posting' });
-        }
-
-        const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json({ success: true, data: Job });
+        const internship = await Internship.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!internship) return res.status(404).json({ success: false, message: 'Internship not found' });
+        res.status(200).json({ success: true, data: internship });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
