@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     experience: Number,
     education: String,
     location:String,
-    College:String,
+    college:String,// for student
     dateOfBirth: { type: Date},
     academicPercentage: { type: Number},
     // Additional profile fields...
@@ -32,7 +32,12 @@ appliedTpoInternships: [{
   type: mongoose.Schema.Types.ObjectId,
   ref: 'tpoInternship',
 }],
-  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' } // For HR role
+appliedTpoEvents: [{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'tpoEvent',
+}],
+  company: String, // For HR role
+  college: String, //for tpo
 },{timestamps:true});
 
 

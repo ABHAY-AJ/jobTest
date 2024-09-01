@@ -75,10 +75,10 @@ exports.deleteTpoJob = async (req, res) => {
 // Apply for a job
 exports.applyForTpoJob = async (req, res) => {
     try {
-        const job = await tpoJob.findById(req.params.jobId);
+        const job = await tpoJob.findById(req.params.id);
         if (!job) return res.status(404).json({ success: false, message: 'Job not found' });
         console.log(req.user._id)
-        const user = await User.findOne(req.user._id);
+        const user = await User.findById(req.user._id);
         // console.log(user);
         if (!user) {
             return res.status(404).json({ success: false, message: 'Student profile not found' });

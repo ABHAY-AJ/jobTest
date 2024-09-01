@@ -75,14 +75,12 @@ exports.deleteTpoInternship = async (req, res) => {
 };
 
 
-
-
 // Apply for an internship
 exports.applyForTpoInternship = async (req, res) => {
     try {
         const internship = await tpoInternship.findById(req.params.id);
         if (!internship) return res.status(404).json({ success: false, message: 'Internship not found' });
-        const user = await User.findOne(req.user._id);
+        const user = await User.findById(req.user._id);
         console.log(user);
         if (!user) {
             return res.status(404).json({ success: false, message: 'Student profile not found' });

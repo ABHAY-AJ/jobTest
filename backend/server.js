@@ -17,13 +17,17 @@ const tpoInternshipRoutes = require('./routes/tpoInternship');
 const studentRoutes = require("./routes/student");
 const userRoutes = require('./routes/user');
 const hrRoute = require("./routes/hr");
+const tpoEventRoutes = require('./routes/tpoEvent');
+const tpoRoute = require("./routes/tpo");
 
 app.use('/api/v1', jobRoutes);
 app.use('/api/v1', tpoJobRoutes);
 app.use('/api/v1', internshipRoutes);
 app.use('/api/v1', tpoInternshipRoutes);
+app.use('/api/v1',tpoEventRoutes)
 app.use('/api/v1', studentRoutes);
 app.use('/api/v1', hrRoute);
+app.use('/api/v1',tpoRoute);
 app.use('/api/auth', userRoutes);
 
 

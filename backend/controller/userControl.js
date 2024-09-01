@@ -25,6 +25,8 @@ exports.registerUser = async (req, res) => {
                 email: user.email,
                 role: user.role,
                 profile: user.profile,
+                company : user.company || null,
+                college: user.college || null,
                 token: generateToken(user._id)
             }
         });

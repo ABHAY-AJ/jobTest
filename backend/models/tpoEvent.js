@@ -20,7 +20,7 @@ const eventSchema = new mongoose.Schema({
         education: String,
       location: {type:[String], 
         default:"Any"},
-      College:{type:String, default:"Any"},
+    //   College:{type:String, default:"Any"},
       dateOfBirth: { type: Date },
       academicPercentage: { type: Number },
       branch:String,
@@ -32,10 +32,10 @@ const eventSchema = new mongoose.Schema({
     },
     college: {
         type: String,
-        required: true,
+        required: true,//for tpo
     },
     selectedColleges: [{
-        type: String,
+        type: String,default:"Any"
     }],
     participants: [{
         type: mongoose.Schema.Types.ObjectId,

@@ -39,7 +39,7 @@ exports.getTpoEventById = async (req, res) => {
 
 
 // Update a job by ID
-exports.updateEventJob = async (req, res) => {
+exports.updateTpoEvent = async (req, res) => {
     try {
         const event = await tpoEvent.findById(req.params.id);
         if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
@@ -77,31 +77,32 @@ exports.deleteTpoEvent = async (req, res) => {
 exports.applyForTpoEvent = async (req, res) => {
     try {
         const event = await tpoEvent.findById(req.params.id);
-        if (!job) return res.status(404).json({ success: false, message: 'Event not found' });
-        console.log(req.user._id)
-        const user = await User.findOne(req.user._id);
-        // console.log(user);
+        if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
+
+        const user = await User.findById(req.user._id);
         if (!user) {
             return res.status(404).json({ success: false, message: 'Student profile not found' });
         }
 
         // Check if the student has already applied
-        if (user.appliedTpoEvent.includes(tpoEvent._id)) {
+        if (user.appliedTpoEvents.includes(event._id)) {
             return res.status(400).json({ success: false, message: 'You have already applied for this event' });
         }
 
         const application = new tpoApplication({
             student: req.user._id,
-            tpoJob: tpoJob._id,
-            score: calculateScore(tpoEvent.criteria, req.user.profile)
+            tpoEvent: event._id,
+            score: calculateScore(event.criteria, req.user.profile) // Calculate score based on event criteria and user profile
         });
 
         await application.save();
-        event.tpoApplications.push(application._id);
-        await job.save();
-         // Add the job to the student's applied jobs
-         user.appliedTpoEvent.push(tpoJob._id);
-         await user.save();
+
+        event.participants.push(application._id);
+        await event.save();
+
+        // Add the event to the student's applied events
+        user.appliedTpoEvents.push(event._id);
+        await user.save();
 
         res.status(201).json({ success: true, data: application });
     } catch (error) {
@@ -174,7 +175,7 @@ function calculateScore(criteria, profile) {
     } else {
         return 0; // No criteria defined
     }
+    return score;
 }
 
-module.exports = calculateScore;
 
