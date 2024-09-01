@@ -44,9 +44,19 @@ exports.getTpoInternshipById = async (req, res) => {
 
 exports.updateTpoInternship = async (req, res) => {
     try {
-        const internship = await tpoInternship.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!internship) return res.status(404).json({ success: false, message: 'Internship not found' });
-        res.status(200).json({ success: true, data: internship });
+        const internship = await tpoInternship.findById(req.params.id);
+        if (!internship) return res.status(404).json({ success: false, message: 'internship not found' });
+
+        const createdAt = new Date(internship.createdAt);
+        const now = new Date();
+        const timeDifference = (now - createdAt) / (1000 * 60 * 60); // Convert milliseconds to hours
+
+        if (timeDifference > 2) {
+            return res.status(403).json({ success: false, message: 'You can only update the internship within 2 hours of posting' });
+        }
+
+        const updatedInternship = await tpoEvent.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json({ success: true, data: updatedInternship });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
