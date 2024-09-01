@@ -37,9 +37,19 @@ exports.getJobById = async (req, res) => {
 // Update a job by ID
 exports.updateJob = async (req, res) => {
     try {
-        const job = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!job) return res.status(404).json({ success: false, message: 'Job not found' });
-        res.status(200).json({ success: true, data: job });
+        const job = await Job.findById(req.params.id);
+        if (!job) return res.status(404).json({ success: false, message: 'job not found' });
+
+        const createdAt = new Date(job.createdAt);
+        const now = new Date();
+        const timeDifference = (now - createdAt) / (1000 * 60 * 60); // Convert milliseconds to hours
+
+        if (timeDifference > 2) {
+            return res.status(403).json({ success: false, message: 'You can only update the job within 2 hours of posting' });
+        }
+
+        const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json({ success: true, data: updatedJob });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
