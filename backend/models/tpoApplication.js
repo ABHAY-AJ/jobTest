@@ -10,7 +10,7 @@ const applicationSchema = new mongoose.Schema({
     score: { type: Number, default: 0 },
     status: { type: String, enum: ['Pending', 'Reviewed', 'Accepted', 'Rejected'], default: 'Pending' },
     date: { type: Date, default: Date.now }
-  }, { timestamps: true });
+  });
   
   module.exports = mongoose.model('tpoApplication', applicationSchema);
   
