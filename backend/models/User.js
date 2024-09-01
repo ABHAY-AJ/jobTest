@@ -28,12 +28,17 @@ appliedInternships: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Internship',
 }],
+
+appliedTpoEvent:[{
+  type: mongoose.Schema.Types.ObjectId,
+  ref: 'tpoEvent',
+}],
 appliedTpoInternships: [{
   type: mongoose.Schema.Types.ObjectId,
   ref: 'tpoInternship',
 }],
   company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' } // For HR role
-});
+}, { timestamps: true });
 
 
 // Password hashing before saving the user
