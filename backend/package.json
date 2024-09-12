@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "build-backend": "echo 'No build step for backend'",  // Adjust if you have a build step
+  "build-backend": "echo 'No build step for backend'",
   "build-frontend": "cd ../frontend && npm install && npm run build",
   "build": "npm run build-backend && npm run build-frontend",
   "start": "node server.js",
