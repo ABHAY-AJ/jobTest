@@ -32,11 +32,11 @@ app.use('/api/v1',tpoRoute);
 app.use('/api/auth', userRoutes);
 
 
-app.use(express.static(path.join(__dirname, 'frontend/build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 // Serve the React app for any unmatched routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 });
 
 
