@@ -43,3 +43,37 @@ exports.reviewApplication = async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
+
+
+// controllers/applicationController.js
+
+exports.getApplicationsForJob = async (req, res) => {
+    try {
+      const { jobId } = req.params;
+      const { minScore, experience, marks } = req.query;
+  
+      // Build a query object based on filters
+      let query = { job: jobId };
+  
+      if (minScore) {
+        query.score = { $gte: minScore };
+      }
+      if (experience) {
+        query['candidateProfile.experience'] = { $gte: experience };
+      }
+      if (marks) {
+        query['candidateProfile.marks'] = { $gte: marks };
+      }
+  
+      // Populate candidate details
+      const applications = await Application.find(query)
+        .populate('student', 'name email profile')
+        .exec();
+  
+      res.status(200).json({ success: true, data: applications });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  };
+  

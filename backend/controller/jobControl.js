@@ -23,6 +23,17 @@ exports.getAllJobs = async (req, res) => {
     }
 };
 
+// Get all jobs posted by the logged-in HR
+exports.getAllJobsByHR = async (req, res) => {
+    try {
+        const jobs = await Job.find({ postedBy: req.user._id }).populate('postedBy', 'name email');
+        res.status(200).json({ success: true, data: jobs });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+
 // Get a specific job by ID
 exports.getJobById = async (req, res) => {
     try {

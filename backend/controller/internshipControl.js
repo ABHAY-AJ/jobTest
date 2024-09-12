@@ -23,6 +23,19 @@ exports.getAllInternships = async (req, res) => {
     }
 };
 
+// Get all internships posted by the logged-in HR
+exports.getAllInternshipsByHR = async (req, res) => {
+    try {
+        const internships = await Internship.find({ postedBy: req.user._id }).populate('postedBy', 'name email');
+        res.status(200).json({ success: true, data: internships });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+
+
+
 // Get a specific internship by ID
 exports.getInternshipById = async (req, res) => {
     try {
@@ -38,7 +51,7 @@ exports.getInternshipById = async (req, res) => {
 exports.updateInternship = async (req, res) => {
     try {
         const internship = await Internship.findById(req.params.id);
-        if (!job) return res.status(404).json({ success: false, message: 'internship not found' });
+        if (!internship) return res.status(404).json({ success: false, message: 'internship not found' });
 
         const createdAt = new Date(internship.createdAt);
         const now = new Date();
@@ -48,8 +61,8 @@ exports.updateInternship = async (req, res) => {
             return res.status(403).json({ success: false, message: 'You can only update the internship within 2 hours of posting' });
         }
 
-        const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json({ success: true, data: Job });
+        const updatedInternship = await Internship.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json({ success: true, data: Internship });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }

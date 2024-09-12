@@ -1,12 +1,14 @@
 const express = require('express');
 const { createInternship, updateInternship, deleteInternship, applyForInternship,getAllInternships,getInternshipById } = require('../controller/internshipControl');
 const { protect, authorize } = require('../middleware/auth');
+const {getAllInternshipsByHR} = require("../controller/internshipControl");
 
 const router = express.Router();
 
 
+router.get('/all-internships',getAllInternships);
+router.get('/internships/hr', protect, authorize('HR'), getAllInternshipsByHR);
 
-router.get('/all-internships',protect,getAllInternships);
 router.get('/internship/:id',protect,getInternshipById);
 
 router.post('/internships', protect, authorize('HR', 'TPO'), createInternship);

@@ -1,0 +1,30 @@
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  
+  .carousel .slick-slide {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .carousel .carousel-slide {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .carousel .ant-card {
+    margin: 0 8px;
+  }
+  
+  .carousel .ant-card-cover img {
+    width: 100%; /* Ensure image fits the card */
+  }
+  
+  .ant-carousel .slick-slide {
+    margin: 0 4px;
+  }
+  
