@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "build-backend": "echo 'No build step for backend'",
-    "build-frontend": "cd ../frontend && npm install && npm run build",
-    "build": "npm run build-backend && npm run build-frontend",
-    "start": "node server.js",
+    "build": "npm install && cd ../client && npm install && npm run build",
+    "start": "node server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
