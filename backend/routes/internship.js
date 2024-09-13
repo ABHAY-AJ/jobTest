@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/all-internships',getAllInternships);
 router.get('/internships/hr', protect, authorize('HR'), getAllInternshipsByHR);
 
-router.get('/internship/:id',protect,getInternshipById);
+router.get('/internship/:id',getInternshipById);
 
 router.post('/internships', protect, authorize('HR', 'TPO'), createInternship);
 router.put('/internships/:id', protect, authorize('HR', 'TPO'), updateInternship);

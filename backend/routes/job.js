@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/all-jobs',getAllJobs);
 router.get('/jobs/hr', protect, authorize('HR'), getAllJobsByHR);
-router.get('/job/:id',protect,getJobById);
+router.get('/job/:id',getJobById);
 // Apply protect middleware to ensure only authenticated users can access these routes
 router.post('/jobs', protect, authorize('HR'), createJob); // Only HR and TPO can create jobs
 router.put('/jobs/:id', protect, authorize('HR'), updateJob); // Only HR and TPO can update jobs

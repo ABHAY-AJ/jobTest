@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudentApplications } from '../../redux/student-Slice/studentSlice';
-import { Card, List, Spin, Typography, Alert, Tag, Descriptions, Divider } from 'antd';
+import { fetchJobById } from '../../redux/jobs-slices/jobSlice';
+import { fetchInternshipById } from '../../redux/internship-slices/internshipSlice';
+import { Card, List, Spin, Typography, Alert, Tag, Descriptions, Divider, Modal, Button } from 'antd';
 
 const { Title } = Typography;
 
@@ -15,10 +17,65 @@ const statusColors = {
 const StudentApplications = () => {
     const dispatch = useDispatch();
     const { applications, loading, error } = useSelector((state) => state.student);
+    const jobs = useSelector((state) => state.jobs.jobs);
+    const internships = useSelector((state) => state.internships.internships);
+
+    const [jobDetails, setJobDetails] = useState({});
+    const [internshipDetails, setInternshipDetails] = useState({});
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedJob, setSelectedJob] = useState(null); // Tracks selected job for the modal
+    const [selectedInternship, setSelectedInternship] = useState(null); // Tracks selected internship for the modal
 
     useEffect(() => {
         dispatch(fetchStudentApplications());
     }, [dispatch]);
+
+    useEffect(() => {
+        // Fetch details for each job and internship in applications
+        applications.forEach((application) => {
+            if (application.job) {
+                dispatch(fetchJobById(application.job)).then((response) => {
+                    if (response.meta.requestStatus === 'fulfilled') {
+                        setJobDetails((prev) => ({
+                            ...prev,
+                            [application.job]: response.payload
+                        }));
+                    }
+                });
+            }
+            if (application.internship) {
+                dispatch(fetchInternshipById(application.internship)).then((response) => {
+                    if (response.meta.requestStatus === 'fulfilled') {
+                        setInternshipDetails((prev) => ({
+                            ...prev,
+                            [application.internship]: response.payload
+                        }));
+                    }
+                });
+            }
+        });
+    }, [applications, dispatch]);
+
+    const showModal = (jobId, internshipId) => {
+        if (jobId) {
+            setSelectedJob(jobDetails[jobId]);
+        } else if (internshipId) {
+            setSelectedInternship(internshipDetails[internshipId]);
+        }
+        setIsModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+        setSelectedJob(null);
+        setSelectedInternship(null);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        setSelectedJob(null);
+        setSelectedInternship(null);
+    };
 
     if (loading) return <Spin tip="Loading..." />;
     if (error) return <Alert message="Error" description={error} type="error" showIcon />;
@@ -42,26 +99,25 @@ const StudentApplications = () => {
                                 <Descriptions.Item label="Score">
                                     {application.score}
                                 </Descriptions.Item>
-                                {application.job && (
+
+                                {application.job && jobDetails[application.job] && (
                                     <>
-                                        <Descriptions.Item label="Applied Job ID">
-                                            {application.job}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="Job Details">
-                                            {/* You can add more job-related details here, e.g., title, company */}
+                                        <Descriptions.Item label="Job Title">
+                                            {jobDetails[application.job].title}
+                                            <Button type="link" onClick={() => showModal(application.job, null)}>View Details</Button>
                                         </Descriptions.Item>
                                     </>
                                 )}
-                                {application.internship && (
+
+                                {application.internship && internshipDetails[application.internship] && (
                                     <>
-                                        <Descriptions.Item label="Applied Internship ID">
-                                            {application.internship}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item label="Internship Details">
-                                            {/* Add more internship-related details here */}
+                                        <Descriptions.Item label="Internship Title">
+                                            {internshipDetails[application.internship].title}
+                                            <Button type="link" onClick={() => showModal(null, application.internship)}>View Details</Button>
                                         </Descriptions.Item>
                                     </>
                                 )}
+
                                 <Descriptions.Item label="Date of Application">
                                     {new Date(application.date).toLocaleDateString()}
                                 </Descriptions.Item>
@@ -70,6 +126,46 @@ const StudentApplications = () => {
                     </List.Item>
                 )}
             />
+
+            {/* Modal for Job and Internship Details */}
+            <Modal
+                title={selectedJob ? 'Job Details' : 'Internship Details'}
+                visible={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                {selectedJob && (
+                    <Descriptions bordered column={1}>
+                        <Descriptions.Item label="Title">{selectedJob.title}</Descriptions.Item>
+                        <Descriptions.Item label="Description">{selectedJob.description}</Descriptions.Item>
+                        <Descriptions.Item label="Criteria">
+                            {Object.entries(selectedJob.criteria).map(([key, value]) => (
+                                <div key={key}>
+                                    <strong>{key}:</strong> {Array.isArray(value)
+                                        ? value.join(', ')
+                                        : value}
+                                </div>
+                            ))}
+                        </Descriptions.Item>
+                    </Descriptions>
+                )}
+
+                {selectedInternship && (
+                    <Descriptions bordered column={1}>
+                        <Descriptions.Item label="Title">{selectedInternship.title}</Descriptions.Item>
+                        <Descriptions.Item label="Description">{selectedInternship.description}</Descriptions.Item>
+                        <Descriptions.Item label="Criteria">
+                            {Object.entries(selectedInternship.criteria).map(([key, value]) => (
+                                <div key={key}>
+                                    <strong>{key}:</strong> {Array.isArray(value)
+                                        ? value.join(', ')
+                                        : value}
+                                </div>
+                            ))}
+                        </Descriptions.Item>
+                    </Descriptions>
+                )}
+            </Modal>
         </div>
     );
 };

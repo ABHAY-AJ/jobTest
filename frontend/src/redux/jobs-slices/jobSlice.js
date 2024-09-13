@@ -49,6 +49,7 @@ export const fetchJobById = createAsyncThunk('jobs/fetchById', async (jobId, { r
                 Authorization: `Bearer ${token}`,
             },
         });
+        console.log('Job Data:', data);
         return data.data;
     } catch (error) {
         return rejectWithValue(error.response.data.message);
@@ -151,6 +152,7 @@ const jobSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchJobById.fulfilled, (state, action) => {
+                console.log('Job Fetched:', action.payload);
                 state.loadingJobDetail = false;
                 state.job = action.payload;
             })
