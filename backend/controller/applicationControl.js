@@ -1,4 +1,5 @@
 const Application = require('../models/Application');
+const User = require('../models/User');
 
 // Get all applications for a specific job or internship
 exports.getApplications = async (req, res) => {
@@ -15,27 +16,39 @@ exports.getApplications = async (req, res) => {
     }
 };
 
-// Filter applications based on score (e.g., score >= 60)
+// Filter applications based on score, experience, and marks
 exports.filterApplications = async (req, res) => {
     try {
-        const applications = await Application.find({ 
+        const { minScore = 60, experience, marks } = req.query;
+        const filters = {
             $and: [
                 { $or: [{ job: req.params.id }, { internship: req.params.id }] },
-                { score: { $gte: req.query.minScore || 60 } }
+                { score: { $gte: minScore } }
             ]
-        }).populate('student', 'name email profile');
+        };
+
+        if (experience) {
+            filters.$and.push({ 'student.experience': { $gte: experience } });
+        }
+
+        if (marks) {
+            filters.$and.push({ 'student.marks': { $gte: marks } });
+        }
+
+        const applications = await Application.find(filters).populate('student', 'name email profile');
         res.status(200).json({ success: true, data: applications });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
 };
 
+
 // Review an application (e.g., update status)
 exports.reviewApplication = async (req, res) => {
     try {
 
         console.log(req.params.applicationId)
-        const application = await Application.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const application = await Application.findByIdAndUpdate(req.params.applicationId, req.body, { new: true });
         // console.log(application);
         if (!application) return res.status(404).json({ success: false, message: 'Application not found' });
         res.status(200).json({ success: true, data: application });
@@ -43,6 +56,18 @@ exports.reviewApplication = async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
+// In your studentController.js
+exports.getStudentProfile = async (req, res) => {
+    try {
+        const student = await User.findById(req.params.studentId);
+        if (!student) return res.status(404).json({ success: false, message: 'Student not found' });
+        res.status(200).json({ success: true, data: student });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 
 
 

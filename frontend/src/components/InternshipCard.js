@@ -1,17 +1,25 @@
-// src/components/InternshipCard.js
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Typography, Button, Divider } from 'antd';
 import { Link } from 'react-router-dom';
+import './InternshipCard.css'; // Custom CSS for styling
+
+const { Title, Text } = Typography;
 
 const InternshipCard = ({ internship }) => {
   return (
-    <Card className="mb-3">
-      <Card.Body>
-        <Card.Title>{internship.title}</Card.Title>
-        <Card.Text>{internship.description}</Card.Text>
-        <Button as={Link} to={`/internships/${internship._id}`} variant="primary">View Details</Button>
-      </Card.Body>
-    </Card>
+    <div className="internship-list-item">
+      <div className="internship-info">
+        <Title level={4} className="internship-title">{internship.title}</Title>
+        <Text className="internship-company">{internship.company}</Text>
+        <Divider />
+        <Text className="internship-description">{internship.description}</Text>
+      </div>
+      <div className="internship-actions">
+        <Link to={`/internships/${internship._id}`}>
+          <Button type="primary">View Details</Button>
+        </Link>
+      </div>
+    </div>
   );
 };
 

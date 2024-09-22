@@ -1,0 +1,38 @@
+.internship-list-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .internship-info {
+    margin-bottom: 16px;
+  }
+  
+  .internship-title {
+    margin: 0;
+    color: #333;
+  }
+  
+  .internship-company {
+    display: block;
+    color: #888;
+  }
+  
+  .internship-description {
+    color: #555;
+  }
+  
+  .internship-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .internship-actions .ant-btn {
+    margin-top: 10px;
+  }
+  

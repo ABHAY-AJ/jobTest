@@ -1,27 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Layout, Row, Col, Card, Button, Table, Typography, message } from 'antd';
+import { Layout, Row, Col, Card, Button, Table, Typography, message, Form } from 'antd';
 import { fetchAllJobs, deleteJob, fetchJobsByHR } from '../../redux/jobs-slices/jobSlice';
-import {  deleteInternship, fetchInternshipsByHR } from '../../redux/internship-slices/internshipSlice';
+import { deleteInternship, fetchInternshipsByHR } from '../../redux/internship-slices/internshipSlice';
+import { fetchApplications, reviewApplicationThunk } from '../../redux/application/applicationSlice';
 import { Link } from 'react-router-dom';
+import ApplicationsModal from "./ApplicationsModal/ApplicationsModal";
+import "./hh.css"
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedApplications, setSelectedApplications] = useState([]);
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const [selectedApplicationId, setSelectedApplicationId] = useState(null);
+  const [reviewForm] = Form.useForm();
 
-  // Select jobs state
+  const hrr  =  useSelector((state) => state);
+  console.log("hrr",hrr);
+
   const { jobs = [], loading: jobLoading = false, error: jobError = null } = useSelector((state) => state.jobs || {});
-  console.log("jjj",jobs);
-
   const { internships = [], loading: internshipLoading = false, error: internshipError = null } = useSelector((state) => state.internships || {});
-  console.log("Internships posted by HR:", internships);
 
   useEffect(() => {
     dispatch(fetchJobsByHR());
     dispatch(fetchInternshipsByHR());
   }, [dispatch]);
+
+  const onViewApplications = async (id, title, isJob = true) => {
+    try {
+      setSelectedTitle(title);
+      const applications = await dispatch(fetchApplications(id)).unwrap();
+      setSelectedApplications(applications);
+      setIsModalVisible(true);
+    } catch (error) {
+      message.error(`Failed to fetch applications: ${error.message}`);
+    }
+  };
 
   const handleJobDelete = async (id) => {
     try {
@@ -43,6 +61,26 @@ const Dashboard = () => {
     } catch (error) {
       message.error(`Failed to delete internship: ${error.message}`);
     }
+  };
+
+  const handleReviewStatusChange = async () => {
+    try {
+      const { status } = reviewForm.getFieldsValue();
+      await dispatch(reviewApplicationThunk({ applicationId: selectedApplicationId, updatedStatus: { status } })).unwrap();
+      message.success('Application status updated successfully');
+      setIsModalVisible(false);
+      setSelectedApplications((prevApplications) =>
+        prevApplications.map((app) => (app._id === selectedApplicationId ? { ...app, status } : app))
+      );
+    } catch (error) {
+      message.error(`Failed to update application status: ${error.message}`);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setSelectedApplications([]);
+    reviewForm.resetFields();
   };
 
   if (jobLoading || internshipLoading) return <p>Loading...</p>;
@@ -83,12 +121,11 @@ const Dashboard = () => {
                         <Button type="link">
                           <Link to={`/edit-job/${record._id}`}>Edit</Link>
                         </Button>
-                        <Button
-                          type="link"
-                          danger
-                          onClick={() => handleJobDelete(record._id)}
-                        >
+                        <Button type="link" danger onClick={() => handleJobDelete(record._id)}>
                           Delete
+                        </Button>
+                        <Button type="link" onClick={() => onViewApplications(record._id, record.title)}>
+                          View Applications
                         </Button>
                       </span>
                     )}
@@ -116,12 +153,11 @@ const Dashboard = () => {
                         <Button type="link">
                           <Link to={`/edit-internship/${record._id}`}>Edit</Link>
                         </Button>
-                        <Button
-                          type="link"
-                          danger
-                          onClick={() => handleInternshipDelete(record._id)}
-                        >
+                        <Button type="link" danger onClick={() => handleInternshipDelete(record._id)}>
                           Delete
+                        </Button>
+                        <Button type="link" onClick={() => onViewApplications(record._id, record.title, false)}>
+                          View Applications
                         </Button>
                       </span>
                     )}
@@ -130,6 +166,18 @@ const Dashboard = () => {
               </Card>
             </Col>
           </Row>
+
+          {/* Applications Modal */}
+          <ApplicationsModal
+            isModalVisible={isModalVisible}
+            handleCloseModal={handleCloseModal}
+            selectedTitle={selectedTitle}
+            selectedApplications={selectedApplications}
+            setSelectedApplicationId={setSelectedApplicationId}
+            selectedApplicationId={selectedApplicationId}
+            reviewForm={reviewForm}
+            handleReviewStatusChange={handleReviewStatusChange}
+          />
         </Content>
       </Layout>
     </Layout>

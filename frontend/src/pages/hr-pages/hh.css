@@ -1,0 +1,17 @@
+/* Override the default Ant Design hover effect */
+.ant-table-tbody > tr:hover > td {
+    background: none !important; /* Disable default background on hover */
+  }
+  
+  /* Custom hover effect for the entire row */
+  .custom-hover-row {
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .custom-hover-row:hover {
+    background-color: #e6f7ff !important; /* Soft blue background */
+    cursor: pointer; /* Pointer cursor to indicate clickable row */
+    transform: translateY(-2px); /* Slightly lift the row */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+  

@@ -2,8 +2,13 @@ const tpoApplication = require('../models/tpoApplication');
 
 exports.getTpoApplications = async (req, res) => {
     try {
-        const applications = await tpoApplication.find({ tpoEvent: req.params.id })
-            .populate('student', 'name email profile');
+        const applications = await tpoApplication.find({ 
+            $or: [
+                { tpoJob: req.params.id },
+                { tpoInternship: req.params.id },
+                {tpoEvent: req.params.id}
+            ]
+        }).populate('student', 'name email profile');;
         res.status(200).json({ success: true, data: applications });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

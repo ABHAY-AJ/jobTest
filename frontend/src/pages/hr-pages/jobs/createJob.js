@@ -69,6 +69,12 @@ const CreateJob = () => {
         >
           <Input />
         </Form.Item>
+        <Form.Item
+          name="criteria.area"
+          label="Area"
+        >
+          <Input />
+        </Form.Item>
         
         <Form.Item
           name="criteria.College"

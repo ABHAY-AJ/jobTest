@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
     experience: Number,
     education: String,
     location:String,
+    area:String,
     college:String,// for student
     dateOfBirth: { type: Date},
     academicPercentage: { type: Number},

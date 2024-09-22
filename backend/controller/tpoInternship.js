@@ -30,6 +30,18 @@ exports.getAllTpoInternships = async (req, res) => {
 
 
 
+// Get all internships posted by the logged-in HR
+exports.getAllInternshipsByTPO = async (req, res) => {
+    try {
+        const tpoInternships = await tpoInternship.find({ postedBy: req.user._id }).populate('postedBy', 'name email');
+        res.status(200).json({ success: true, data: tpoInternships });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+
+
 // Get a specific internship by ID
 exports.getTpoInternshipById = async (req, res) => {
     try {
@@ -44,7 +56,7 @@ exports.getTpoInternshipById = async (req, res) => {
 
 exports.updateTpoInternship = async (req, res) => {
     try {
-        const internship = await tpoInternship.findById(req.params.id);
+        const internship = await tpoInternship.findById(req.params.internshipId);
         if (!internship) return res.status(404).json({ success: false, message: 'internship not found' });
 
         const createdAt = new Date(internship.createdAt);
@@ -55,7 +67,7 @@ exports.updateTpoInternship = async (req, res) => {
             return res.status(403).json({ success: false, message: 'You can only update the internship within 2 hours of posting' });
         }
 
-        const updatedInternship = await tpoEvent.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedInternship = await tpoInternship.findByIdAndUpdate(req.params.internshipId, req.body, { new: true });
         res.status(200).json({ success: true, data: updatedInternship });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
@@ -75,42 +87,50 @@ exports.deleteTpoInternship = async (req, res) => {
 };
 
 
-// Apply for an internship
+// Apply for internship
 exports.applyForTpoInternship = async (req, res) => {
     try {
-        const internship = await tpoInternship.findById(req.params.id);
+        const internshipId = req.params.id;
+
+        // Fetch the internship document
+        const internship = await tpoInternship.findById(internshipId);
         if (!internship) return res.status(404).json({ success: false, message: 'Internship not found' });
+
+        // Fetch the user document
+     
+        
         const user = await User.findById(req.user._id);
-        console.log(user);
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'Student profile not found' });
-        }
-console.log(user.appliedTpoInternships.includes(tpoInternship._id));
+        if (!user) return res.status(404).json({ success: false, message: 'Student profile not found' });
+
         // Check if the student has already applied
-        if (user.appliedTpoInternships.includes(tpoInternship._id)) {
+        if (user.appliedTpoInternships.includes(internshipId)) {
             return res.status(400).json({ success: false, message: 'You have already applied for this internship' });
         }
 
+        // Create a new application
         const application = new tpoApplication({
             student: req.user._id,
-            tpoInternship: tpoInternship._id,
-            score: calculateScore(tpoInternship.criteria, req.user.profile)
+            tpoInternship: internshipId,
+            score: calculateScore(internship.criteria, user.profile)
         });
 
         await application.save();
-        tpoInternship.tpoApplications.push(tpoApplication._id);
+
+        // Update internship and user data
+        internship.tpoApplications.push(application._id);
         await internship.save();
 
-         // Add the internship to the student's applied internships
-         user.appliedTpoInternships.push(tpoInternship._id);
-         await user.save();
-
+        user.appliedTpoInternships.push(internshipId);
+        await user.save();
 
         res.status(201).json({ success: true, data: application });
     } catch (error) {
+        console.error('Error applying for internship:', error);
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
+
 
 
 

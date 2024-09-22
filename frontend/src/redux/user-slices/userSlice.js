@@ -3,12 +3,13 @@ import axios from 'axios';
 
 // Initial state
 const initialState = {
-  userInfo: null,  // Holds user data
-  token: localStorage.getItem('token') || null, // Token from localStorage if available
-  role: null,
+  userInfo: null,
+  token: localStorage.getItem('token') || null,
+  role: localStorage.getItem('role') || null, // Persist role if available
   loading: false,
   error: null,
 };
+
 
 // Async actions
 export const registerUser = createAsyncThunk('user/register', async (userData, { rejectWithValue }) => {
@@ -25,11 +26,13 @@ export const loginUser = createAsyncThunk('user/login', async (userData, { rejec
   try {
     const { data } = await axios.post('http://localhost:5000/api/auth/login', userData);
     localStorage.setItem('token', data.data.token);
+    localStorage.setItem('role', data.data.role); // Store role in localStorage
     return data.data;
   } catch (error) {
     return rejectWithValue(error.response.data.message);
   }
 });
+
 
 export const getProfile = createAsyncThunk('user/profile', async (_, { getState, rejectWithValue }) => {
   try {
@@ -45,6 +48,7 @@ export const getProfile = createAsyncThunk('user/profile', async (_, { getState,
   }
 });
 
+
 // Slice
 const userSlice = createSlice({
   name: 'user',
@@ -55,6 +59,7 @@ const userSlice = createSlice({
       state.token = null;
       state.role = null;
       localStorage.removeItem('token');
+      localStorage.removeItem('role'); // Clear role from localStorage
     },
   },
   extraReducers: (builder) => {

@@ -8,6 +8,7 @@ const jobSchema = new mongoose.Schema({
       minExperience: Number,
       education: String,
       location: {type:String, default:"Any"},
+      area: {type:String, default:"Any"},
       College:{type:[String], default:"Any"},
       dateOfBirth: { type: Date },
       academicPercentage: { type: Number },

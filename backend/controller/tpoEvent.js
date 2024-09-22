@@ -26,6 +26,17 @@ exports.getAllTpoEvent = async (req, res) => {
 };
 
 
+// Get all internships posted by the logged-in HR
+exports.getAllEventsByTPO = async (req, res) => {
+    try {
+        const event = await tpoEvent.find({ postedBy: req.user._id }).populate('postedBy', 'name email');
+        res.status(200).json({ success: true, data: event });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+
 // Get a specific job by ID
 exports.getTpoEventById = async (req, res) => {
     try {

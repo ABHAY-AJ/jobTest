@@ -16,9 +16,13 @@ const statusColors = {
 
 const StudentApplications = () => {
     const dispatch = useDispatch();
-    const { applications, loading, error } = useSelector((state) => state.student);
+    const st = useSelector((state) => (state.applications));
+    console.log("st", st)
+    const { applications=[], loading, error } = useSelector((state) => state.student);
+    const stu = useSelector((state) => state);
     const jobs = useSelector((state) => state.jobs.jobs);
     const internships = useSelector((state) => state.internships.internships);
+    console.log("stu", stu)
 
     const [jobDetails, setJobDetails] = useState({});
     const [internshipDetails, setInternshipDetails] = useState({});
@@ -29,6 +33,8 @@ const StudentApplications = () => {
     useEffect(() => {
         dispatch(fetchStudentApplications());
     }, [dispatch]);
+
+
 
     useEffect(() => {
         // Fetch details for each job and internship in applications

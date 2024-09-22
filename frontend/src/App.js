@@ -1,6 +1,8 @@
 // src/App.js
 import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
+import { SiLibreofficewriter } from "react-icons/si";
+import { HiAcademicCap } from "react-icons/hi2";
 import { Button, Layout, Menu, theme } from 'antd';
 import {
   MenuFoldOutlined,
@@ -29,6 +31,23 @@ import { logout } from './redux/user-slices/authSlice';
 import CreateInternship from './pages/hr-pages/internships/CreateInternship';
 import StudentDashboard from './pages/student-pages/StudentDashboard';
 
+import StudentProfile from './pages/hr-pages/StudentProfile/StudentProfile';
+import TpoEventsPage from './pages/TpoEventsPage';
+import TpoInternshipsPage from './pages/TpoInternshipsPage';
+import AllTpoJobs from './pages/AllTpoJobs';
+import TpoDashboard from './pages/tpo-pages/TpoDashboard';
+import PostTpoJob from './pages/tpo-pages/jobs/PostTpoJob';
+import PostTpoInternship from './pages/tpo-pages/internship/PostTpoInternship';
+import TpoJobDetail from './pages/TpoJobDetails';
+import CreateTpoEvent from './pages/tpo-pages/event/CreateTpoEvent';
+import TpoInternshipDetail from './pages/TpoInternshipDetail';
+import EditTpoJobPage from './pages/tpo-pages/jobs/EditTpoJobPage';
+import EditTpoInternshipPage from './pages/tpo-pages/internship/EditTpoInternshipPage';
+import EditTpoEventPage from "./pages/tpo-pages/event/EditTpoEventPage"
+import TpoEventDetail from './pages/TpoEventDetail';
+import TpoApplicationsPage from './pages/tpo-pages/applications/TpoApplicationsPage';
+import { Color } from 'antd/es/color-picker';
+
 const { Header, Sider, Content } = Layout;
 
 const App = () => {
@@ -44,60 +63,78 @@ const App = () => {
     dispatch(logout());
   };
 
-  const menuItems = [
-    {
-      key: '1',
-      icon: <HomeOutlined />,
-      label: <a href="/">Home</a>,
-    },
-    {
-      key: '2',
-      icon: <UserOutlined />,
-      label: <a href="/jobs">Jobs</a>,
-    },
-    {
-      key: '3',
-      icon: <VideoCameraOutlined />,
-      label: <a href="/internships">Internships</a>,
-    },
-    ...(token
-      ? [
-          role === 'student'
-            ? {
-                key: '4',
-                icon: <UserOutlined />,
-                label: <a href="/student-dashboard">Student Dashboard</a>,
-              }
-            : {
-                key: '4',
-                icon: <UserOutlined />,
-                label: <a href="/dashboard">HR Dashboard</a>,
-              },
-          {
-            key: '5',
-            icon: <UserOutlined />,
-            label: <a href="/profile">Profile</a>,
-          },
-          {
-            key: '6',
-            icon: <LogoutOutlined />,
-            label: <a onClick={handleLogout} href='/'>Logout</a>,
-          },
-        ]
-      : [
-          {
-            key: '7',
-            icon: <LoginOutlined />,
-            label: <a href="/login">Login</a>,
-          },
-          {
-            key: '8',
-            icon: <UserOutlined />,
-            label: <a href="/signup">Signup</a>,
-          },
-        ]
-    ),
-  ];
+  // Dynamically set the dashboard path based on user role
+  const dashboardPath =
+    role === 'Student' ? '/student-dashboard' :
+    role === 'HR' ? '/dashboard' :
+    role === 'TPO' ? '/tpo-dashboard' : '/';
+
+    const menuItems = [
+      {
+        key: '1',
+        icon: <HomeOutlined />,
+        label: <Link to="/">Home</Link>,
+      },
+      ...(token && role !== 'Student' ? [] : [ // Only show these links if there is no user or if the user is a Student
+        {
+          key: '2',
+          icon: <SiLibreofficewriter />,
+          label: <Link to="/jobs">Jobs</Link>,
+        },
+        {
+          key: '3',
+          icon: <VideoCameraOutlined />,
+          label: <Link to="/internships">Internships</Link>,
+        },
+        {
+          key: '4',
+          icon: <HiAcademicCap />,
+          label: <Link to="/tpo-jobs">Tpo Jobs</Link>,
+        },
+        {
+          key: '5',
+          icon: <VideoCameraOutlined />,
+          label: <Link to="/tpo-internships">Tpo Internships</Link>,
+        },
+        {
+          key: '6',
+          icon: <VideoCameraOutlined />,
+          label: <Link to="/tpo-events">Tpo Events</Link>,
+        },
+      ]),
+      ...(token
+        ? [
+            {
+              key: '7',
+              icon: <UserOutlined />,
+              label: <Link to={dashboardPath}>Dashboard</Link>,
+            },
+            {
+              key: '8',
+              icon: <UserOutlined />,
+              label: <Link to="/profile">Profile</Link>,
+            },
+            {
+              key: '9',
+              icon: <LogoutOutlined />,
+              label: <a onClick={handleLogout} href="/">Logout</a>,
+            },
+          ]
+        : [
+            {
+              key: '10',
+              icon: <LoginOutlined />,
+              label: <Link to="/login">Login</Link>,
+            },
+            {
+              key: '11',
+              icon: <UserOutlined />,
+              label: <Link to="/signup">Signup</Link>,
+            },
+          ]
+      ),
+    ];
+    
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -116,7 +153,12 @@ const App = () => {
           zIndex: 1,
         }}
       >
-        <div className="logo" style={{ padding: '20px', color: 'white', textAlign: 'center' }}>StackPop</div>
+        <div className="logo" style={{ padding: '20px', textAlign: 'center' }}>
+  <Link to="/" style={{ textDecoration: 'none', color: 'white' }}>
+    StackPop
+  </Link>
+</div>
+
         <Menu
           theme="dark"
           mode="inline"
@@ -160,18 +202,39 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/signup"/>
+            <Route path="/signup" />
             <Route path="/jobs" element={<Jobs />} />
-            <Route path="/jobs/:id" element={<JobDetail />} />
+            <Route path="/jobs/:id" element={<PrivateRoute component={JobDetail}/>} />
+            <Route path="/internships/:id" element={<PrivateRoute component={InternshipDetail}/>} />
             <Route path="/internships" element={<Internships />} />
-            <Route path="/internships/:id" element={<InternshipDetail />} />
+            <Route path="/internships/:id" element={<PrivateRoute component={InternshipDetail}/>} />
             <Route path="/profile" element={<PrivateRoute component={Profile} />} />
             <Route path="/dashboard" element={<PrivateRoute component={Dashboard} />} />
             <Route path="/student-dashboard" element={<PrivateRoute component={StudentDashboard} />} />
-            <Route path="/create-job" element={<CreateJob />} />
-            <Route path="/edit-job/:id" element={<EditJob />} />
-            <Route path="/create-internship" element={<CreateInternship />} />
-            <Route path="/edit-internship/:id" element={<EditInternship />} />
+            <Route path="/create-job" element={<PrivateRoute component={CreateJob}/>} />
+            <Route path="/edit-job/:id" element={<PrivateRoute component={EditJob}/>} />
+            <Route path="/create-internship" element={<PrivateRoute component={CreateInternship}/>} />
+            <Route path="/edit-internship/:id" element={<PrivateRoute component={EditInternship}/>} />
+            
+            <Route path="/student/:studentId" element={<PrivateRoute component={StudentProfile}/>} />
+
+
+            <Route path="/tpo-events" element={<TpoEventsPage />} />
+            <Route path="/tpo-events/:id" element={<PrivateRoute component={TpoEventDetail}/>} />
+
+            <Route path="/tpo-internships" element={<TpoInternshipsPage />} />
+            <Route path="/tpo-internships/:id" element={<PrivateRoute component={TpoInternshipDetail}/>} />
+            <Route path="/tpo-jobs" element={<AllTpoJobs />} />
+            <Route path="/tpo-jobs/:id" element={<PrivateRoute component={TpoJobDetail}/>} />
+            <Route path="/tpo-dashboard" element={<PrivateRoute component={TpoDashboard}/>} />
+            <Route path="/create-tpo-job" element={<PrivateRoute component={PostTpoJob}/>} />
+            <Route path="/create-tpo-internship" element={<PrivateRoute component={PostTpoInternship}/>} />
+            <Route path="/create-tpo-event" element={<PrivateRoute component={CreateTpoEvent}/>}/>
+
+            <Route path="/edit-tpo-job/:id" element={<PrivateRoute component={EditTpoJobPage}/>}/>
+            <Route path="/edit-tpo-internship/:id" element={<PrivateRoute component={EditTpoInternshipPage}/>}/>
+            <Route path="/edit-tpo-event/:id" element={<PrivateRoute component={EditTpoEventPage}/>}/>
+            <Route path="/tpo-applications" element={<PrivateRoute component={TpoApplicationsPage}/>}/>
           </Routes>
         </Content>
       </Layout>

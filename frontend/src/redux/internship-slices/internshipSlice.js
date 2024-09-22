@@ -58,6 +58,7 @@ export const fetchInternshipById = createAsyncThunk('internships/fetchById', asy
 // Create a new job
 export const createInternship = createAsyncThunk('internships/create', async (internshipData, { rejectWithValue }) => {
     try {
+        
         const { data } = await axios.post(`${config.API_URL}/api/v1/internships`, internshipData, {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -94,7 +95,7 @@ export const deleteInternship = createAsyncThunk('internships/delete', async (id
 // Apply for a job
 export const applyForInternship = createAsyncThunk('internship/apply', async (internshipId, { rejectWithValue }) => {
     try {
-        const { data } = await axios.post(`${config.API_URL}/api/v1/internship/${internshipId}/apply`, {}, {
+        const { data } = await axios.post(`${config.API_URL}/api/v1/internships/${internshipId}/apply`, {}, {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         return data.data;
@@ -161,7 +162,7 @@ const internshipSlice = createSlice({
             })
             .addCase(createInternship.fulfilled, (state, action) => {
                 state.loading = false;
-                state.jobs.push(action.payload);
+                state.internships.push(action.payload);
             })
             .addCase(createInternship.rejected, (state, action) => {
                 state.loading = false;

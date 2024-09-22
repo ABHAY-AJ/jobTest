@@ -31,6 +31,7 @@ export const fetchStudentApplications = createAsyncThunk(
                   Authorization: `Bearer ${token}`,
                 },
               });
+              console.log("res",response.data)
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
@@ -82,8 +83,10 @@ const studentSlice = createSlice({
         });
         builder.addCase(fetchStudentApplications.fulfilled, (state, action) => {
             state.loading = false;
-            state.applications = action.payload.applications;
+            console.log("Fetched applications:", action.payload); // Debug log
+            state.applications = action.payload.applications || []; // Ensure applications is set to an empty array if undefined
         });
+        
         builder.addCase(fetchStudentApplications.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;

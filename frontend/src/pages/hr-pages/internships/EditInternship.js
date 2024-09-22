@@ -117,6 +117,13 @@ const EditInternship = () => {
         </Form.Item>
 
         <Form.Item
+          name={['criteria', 'area']}
+          label="Area"
+        >
+          <Input placeholder="Enter Area" />
+        </Form.Item>
+
+        <Form.Item
           name={['criteria', 'College']}
           label="College"
         >
