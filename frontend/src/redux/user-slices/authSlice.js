@@ -21,6 +21,7 @@ const authSlice = createSlice({
       state.user = null;
       state.role=null;
       localStorage.removeItem('token');
+      localStorage.removeItem('role');
     },
     register(state, action) {
       state.isAuthenticated = true;
