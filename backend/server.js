@@ -7,7 +7,12 @@ const app = express();
 
 
 
-app.use(cors());
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://job-portal-1-y6fn.onrender.com', // or '*'
+  credentials: true,
+}));
+
 connectDB();
 app.use(express.json());
 
