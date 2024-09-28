@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 
 app.use(cors({
-  origin: 'https://job-portal-1-y6fn.onrender.com', // or '*'
+  origin: '*', // or '*'
   credentials: true,
 }));
 
