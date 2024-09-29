@@ -6,12 +6,8 @@ const path = require('path');
 const app = express();
 
 
-const corsOptions = {
-  origin: ['https://job-portal-1-y6fn.onrender.com', 'http://localhost:3000'], // Add frontend domains
-  credentials: true,  // Allow credentials like cookies
-};
-app.use(cors(corsOptions));
 
+app.use(cors());
 connectDB();
 app.use(express.json());
 
