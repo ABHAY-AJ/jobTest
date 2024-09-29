@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import config from '../api-link/config';
 
 // Initial state
 const initialState = {
@@ -24,7 +25,7 @@ export const registerUser = createAsyncThunk('user/register', async (userData, {
 
 export const loginUser = createAsyncThunk('user/login', async (userData, { rejectWithValue }) => {
   try {
-    const { data } = await axios.post('http://localhost:5000/api/auth/login', userData);
+    const { data } = await axios.post(`${config.API_URL}/api/auth/login`, userData);
     localStorage.setItem('token', data.data.token);
     localStorage.setItem('role', data.data.role); // Store role in localStorage
     return data.data;
@@ -37,7 +38,7 @@ export const loginUser = createAsyncThunk('user/login', async (userData, { rejec
 export const getProfile = createAsyncThunk('user/profile', async (_, { getState, rejectWithValue }) => {
   try {
     const { user } = getState();
-    const { data } = await axios.get('http://localhost:5000/api/auth/get-user', {
+    const { data } = await axios.get(`${config.API_URL}/api/auth/get-user`, {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
