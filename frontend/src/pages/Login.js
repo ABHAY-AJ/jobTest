@@ -18,20 +18,20 @@ const Login = () => {
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
-      // Dispatch async loginUser action
-      const resultAction = dispatch(loginUser({ email: values.email, password: values.password }));
-
+      // Dispatch async loginUser action and await the result
+      const resultAction = await dispatch(loginUser({ email: values.email, password: values.password }));
+  
       if (loginUser.fulfilled.match(resultAction)) {
         // Show success notification
         notification.success({
           message: 'Login Successful',
           description: 'You have logged in successfully.',
         });
-
+  
         // Navigate based on role
-        if (role === 'student') {
+        if (resultAction.payload.role === 'student') {
           navigate('/student-dashboard');
-        } else if (role === 'hr') {
+        } else if (resultAction.payload.role === 'hr') {
           navigate('/dashboard');
         } else {
           navigate('/');
@@ -48,6 +48,7 @@ const Login = () => {
       setLoading(false);
     }
   };
+  
 
   return (
     <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f2f5' }}>
