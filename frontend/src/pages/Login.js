@@ -19,7 +19,7 @@ const Login = () => {
     setLoading(true);
     try {
       // Dispatch async loginUser action
-      const resultAction = await dispatch(loginUser({ email: values.email, password: values.password }));
+      const resultAction = dispatch(loginUser({ email: values.email, password: values.password }));
 
       if (loginUser.fulfilled.match(resultAction)) {
         // Show success notification

@@ -1,5 +1,5 @@
 const config = {
-    API_URL:'https://job-portal-1-y6fn.onrender.com'
+    API_URL:'http://localhost:5000'
   };
   
   export default config;
