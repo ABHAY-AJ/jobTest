@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from "../redux/user-slices/userSlice"; // Import the async action
+import "./Login.css"
 
 const { Title, Text } = Typography;
 
@@ -49,11 +50,10 @@ const Login = () => {
     }
   };
   
-
   return (
-    <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0f2f5' }}>
+    <div className="login-container">
       <Card
-        style={{ width: '100%', maxWidth: 450, padding: 20 }}
+        className="login-card"
         title={<Title level={2}>Sign In</Title>}
         extra={<div style={{ textAlign: 'center' }}>Sign in to your account</div>}
       >
@@ -104,7 +104,7 @@ const Login = () => {
           <Divider>or</Divider>
 
           <Row gutter={16}>
-            <Col span={12}>
+            <Col xs={12} sm={12}>
               <Button
                 type="default"
                 icon={<FcGoogle />}
@@ -114,7 +114,7 @@ const Login = () => {
                 Sign in with Google
               </Button>
             </Col>
-            <Col span={12}>
+            <Col xs={12} sm={12}>
               <Button
                 type="default"
                 icon={<FaFacebook />}

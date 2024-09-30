@@ -56,10 +56,10 @@ const TpoJobDetail = () => {
   };
 
   return (
-    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       <Card
         style={{ borderRadius: '10px', boxShadow: '0 8px 16px rgba(0, 0, 0, 0.1)' }}
-        bodyStyle={{ padding: '40px' }}
+        bodyStyle={{ padding: '20px' }}
       >
         <Title level={1} style={{ marginBottom: '16px', fontSize: '36px', fontWeight: 'bold' }}>
           {job?.title}
@@ -75,35 +75,35 @@ const TpoJobDetail = () => {
 
         <Title level={3} style={{ marginBottom: '16px', color: '#333' }}>Job Criteria</Title>
         <Row gutter={[16, 16]}>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Skills:</Text>
             <Tag color="blue">{job?.criteria?.skills?.join(', ') || 'Any'}</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Minimum Experience:</Text>
             <Tag color="green">{job?.criteria?.minExperience || 'Any'} years</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Education:</Text>
             <Tag color="orange">{job?.criteria?.education || 'Any'}</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Location:</Text>
             <Tag color="purple">{job?.criteria?.location || 'Any'}</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Area:</Text>
             <Tag color="purple">{job?.criteria?.area || 'Any'}</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>College:</Text>
             <Tag color="magenta">{Array.isArray(job?.criteria?.college) ? job.criteria.college.join(', ') : job?.criteria?.college || 'Any'}</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Date of Birth:</Text>
             <Tag color="cyan">{job?.criteria?.dateOfBirth ? new Date(job.criteria.dateOfBirth).toLocaleDateString() : 'Any'}</Tag>
           </Col>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
             <Text strong style={{ display: 'block', marginBottom: '8px' }}>Academic Percentage:</Text>
             <Tag color="red">{job?.criteria?.academicPercentage || 'Any'}%</Tag>
           </Col>
@@ -121,7 +121,7 @@ const TpoJobDetail = () => {
         </Button>
 
         {/* Stylish Share Buttons Section */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginTop: '20px', flexWrap: 'wrap' }}>
           <Button
             type="default"
             shape="circle"

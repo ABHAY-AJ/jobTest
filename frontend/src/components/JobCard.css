@@ -1,39 +1,62 @@
-/* JobListItem.css */
 .job-list-item {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s; /* Add a transition effect */
+}
+
+.job-list-item:hover {
+  transform: translateY(-2px); /* Elevate the card slightly on hover */
+}
+
+.job-info {
+  margin-bottom: 16px;
+}
+
+.job-title {
+  margin: 0;
+  color: #333;
+}
+
+.job-company {
+  display: block;
+  color: #888;
+}
+
+.job-description {
+  color: #555;
+  overflow: hidden; /* Prevent overflow */
+  text-overflow: ellipsis; /* Show ellipsis for overflow text */
+  display: -webkit-box; /* Apply flex for line clamping */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+}
+
+.job-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.job-actions .ant-btn {
+  margin-top: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .job-list-item {
+      padding: 12px; /* Reduce padding on smaller screens */
   }
-  
-  .job-info {
-    margin-bottom: 16px;
-  }
-  
+
   .job-title {
-    margin: 0;
-    color: #333;
+      font-size: 18px; /* Adjust font size */
   }
-  
-  .job-company {
-    display: block;
-    color: #888;
-  }
-  
+
   .job-description {
-    color: #555;
+      font-size: 14px; /* Adjust font size */
   }
-  
-  .job-actions {
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .job-actions .ant-btn {
-    margin-top: 10px;
-  }
-  
+}

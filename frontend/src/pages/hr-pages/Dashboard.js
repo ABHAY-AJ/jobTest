@@ -92,77 +92,97 @@ const Dashboard = () => {
       <Layout>
         <Content style={{ padding: '24px', background: '#fff' }}>
           <Title level={2}>Dashboard</Title>
-          <Row gutter={24} style={{ marginBottom: '16px' }}>
-            <Col span={24}>
-              <Button type="primary" style={{ marginBottom: '16px' }}>
+          <Row gutter={[16, 16]} style={{ marginBottom: '16px' }}>
+            <Col xs={24} sm={12} lg={8}>
+              <Button type="primary" block>
                 <Link to="/create-job" style={{ textDecoration: 'none' }}>Post New Job</Link>
               </Button>
-              <Button type="primary" style={{ marginBottom: '16px', marginLeft: '16px' }}>
+            </Col>
+            <Col xs={24} sm={12} lg={8}>
+              <Button type="primary" block>
                 <Link to="/create-internship" style={{ textDecoration: 'none' }}>Post New Internship</Link>
               </Button>
             </Col>
           </Row>
 
           {/* Jobs Management Section */}
-          <Row gutter={16}>
+          <Row gutter={[16, 16]}>
             <Col span={24}>
               <Card title="Jobs Management" className="mb-3">
-                <Table dataSource={jobs} rowKey="_id">
-                  <Table.Column title="Title" dataIndex="title" key="title" />
-                  <Table.Column title="Description" dataIndex="description" key="description" />
-                  <Table.Column
-                    title="Actions"
-                    key="actions"
-                    render={(text, record) => (
-                      <span>
-                        <Button type="link">
-                          <Link to={`/jobs/${record._id}`}>View</Link>
-                        </Button>
-                        <Button type="link">
-                          <Link to={`/edit-job/${record._id}`}>Edit</Link>
-                        </Button>
-                        <Button type="link" danger onClick={() => handleJobDelete(record._id)}>
-                          Delete
-                        </Button>
-                        <Button type="link" onClick={() => onViewApplications(record._id, record.title)}>
-                          View Applications
-                        </Button>
-                      </span>
-                    )}
-                  />
-                </Table>
+                <div style={{ overflowX: 'auto' }}>
+                <Table
+  dataSource={jobs}
+  rowKey="_id"
+  pagination={{ responsive: true }}
+  className="custom-hover-row"
+  // Add horizontal scroll for wide content
+  scroll={{ x: 600 }}
+>
+  <Table.Column title="Title" dataIndex="title" key="title" />
+  <Table.Column title="Description" dataIndex="description" key="description" />
+  <Table.Column
+    title="Actions"
+    key="actions"
+    render={(text, record) => (
+      <span>
+        <Button type="link">
+          <Link to={`/jobs/${record._id}`}>View</Link>
+        </Button>
+        <Button type="link">
+          <Link to={`/edit-job/${record._id}`}>Edit</Link>
+        </Button>
+        <Button type="link" danger onClick={() => handleJobDelete(record._id)}>
+          Delete
+        </Button>
+        <Button type="link" onClick={() => onViewApplications(record._id, record.title)}>
+          View Applications
+        </Button>
+      </span>
+    )}
+  />
+</Table>
+
+                </div>
               </Card>
             </Col>
           </Row>
 
           {/* Internships Management Section */}
-          <Row gutter={16}>
+          <Row gutter={[16, 16]}>
             <Col span={24}>
               <Card title="Internships Management" className="mb-3">
-                <Table dataSource={internships} rowKey="_id">
-                  <Table.Column title="Title" dataIndex="title" key="title" />
-                  <Table.Column title="Description" dataIndex="description" key="description" />
-                  <Table.Column
-                    title="Actions"
-                    key="actions"
-                    render={(text, record) => (
-                      <span>
-                        <Button type="link">
-                          <Link to={`/internships/${record._id}`}>View</Link>
-                        </Button>
-                        <Button type="link">
-                          <Link to={`/edit-internship/${record._id}`}>Edit</Link>
-                        </Button>
-                        <Button type="link" danger onClick={() => handleInternshipDelete(record._id)}>
-                          Delete
-                        </Button>
-                        <Button type="link" onClick={() => onViewApplications(record._id, record.title, false)}>
-                          View Applications
-                        </Button>
-                      </span>
-                    )}
-                  />
-                </Table>
+                <div style={{ overflowX: 'auto' }}>
+                  <Table
+                    dataSource={internships}
+                    rowKey="_id"
+                    pagination={{ responsive: true }}
+                    className="custom-hover-row"
+                    scroll={{ x: 600 }} 
+                  >
+                    <Table.Column title="Title" dataIndex="title" key="title" />
+                    <Table.Column title="Description" dataIndex="description" key="description" />
+                    <Table.Column
+                      title="Actions"
+                      key="actions"
+                      render={(text, record) => (
+                        <span>
+                          <Button type="link">
+                            <Link to={`/internships/${record._id}`}>View</Link>
+                          </Button>
+                          <Button type="link">
+                            <Link to={`/edit-internship/${record._id}`}>Edit</Link>
+                          </Button>
+                          <Button type="link" danger onClick={() => handleInternshipDelete(record._id)}>
+                            Delete
+                          </Button>
+                          <Button type="link" onClick={() => onViewApplications(record._id, record.title, false)}>
+                            View Applications
+                          </Button>
+                        </span>
+                      )}
+                    />
+                  </Table>
+                </div>
               </Card>
             </Col>
           </Row>

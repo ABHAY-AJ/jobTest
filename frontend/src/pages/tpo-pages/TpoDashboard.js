@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Layout, Row, Col, Card, Button, Table, Typography, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { deleteTpoJob, fetchJobsByTPO } from "../../redux/tpo/tpoJobs/tpoJobsSlice";
-import {deleteTpoInternship, fetchInternshipsByTPO } from '../../redux/tpo/tpoInternship/tpoInternshipSlice';
-import {deleteTpoEvent, fetchEventsByTPO } from '../../redux/tpo/tpoEventSlice/tpoEventSlice';
+import { deleteTpoInternship, fetchInternshipsByTPO } from '../../redux/tpo/tpoInternship/tpoInternshipSlice';
+import { deleteTpoEvent, fetchEventsByTPO } from '../../redux/tpo/tpoEventSlice/tpoEventSlice';
 
 const { Content } = Layout;
 const { Title } = Typography;
@@ -65,15 +65,19 @@ const TpoDashboard = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Content style={{ padding: '24px', background: '#fff' }}>
         <Title level={2}>TPO Dashboard</Title>
-        <Row gutter={24} style={{ marginBottom: '16px' }}>
-          <Col span={24}>
-            <Button type="primary" style={{ marginBottom: '16px' }}>
+        <Row gutter={16} style={{ marginBottom: '16px' }}>
+          <Col xs={24} sm={8}>
+            <Button type="primary" style={{ marginBottom: '16px', width: '100%' }}>
               <Link to="/create-tpo-job" style={{ textDecoration: 'none' }}>Post New Tpo Job</Link>
             </Button>
-            <Button type="primary" style={{ marginBottom: '16px', marginLeft: '16px' }}>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Button type="primary" style={{ marginBottom: '16px', width: '100%' }}>
               <Link to="/create-tpo-internship" style={{ textDecoration: 'none' }}>Post New Tpo Internship</Link>
             </Button>
-            <Button type="primary" style={{ marginBottom: '16px', marginLeft: '16px' }}>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Button type="primary" style={{ marginBottom: '16px', width: '100%' }}>
               <Link to="/create-tpo-event" style={{ textDecoration: 'none' }}>Post New Tpo Event</Link>
             </Button>
           </Col>
@@ -81,9 +85,9 @@ const TpoDashboard = () => {
 
         {/* Jobs Management */}
         <Row gutter={16}>
-          <Col span={24}>
+          <Col xs={24}>
             <Card title="Tpo Jobs Management" className="mb-3">
-              <Table dataSource={jobs} rowKey="_id">
+              <Table dataSource={jobs} rowKey="_id" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }}>
                 <Table.Column title="Title" dataIndex="title" key="title" />
                 <Table.Column title="Description" dataIndex="description" key="description" />
                 <Table.Column
@@ -113,9 +117,9 @@ const TpoDashboard = () => {
 
         {/* Internships Management */}
         <Row gutter={16}>
-          <Col span={24}>
+          <Col xs={24}>
             <Card title="Tpo Internships Management" className="mb-3">
-              <Table dataSource={internships} rowKey="_id">
+              <Table dataSource={internships} rowKey="_id" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }}>
                 <Table.Column title="Title" dataIndex="title" key="title" />
                 <Table.Column title="Description" dataIndex="description" key="description" />
                 <Table.Column
@@ -145,9 +149,9 @@ const TpoDashboard = () => {
 
         {/* Events Management */}
         <Row gutter={16}>
-          <Col span={24}>
+          <Col xs={24}>
             <Card title="Tpo Events Management" className="mb-3">
-              <Table dataSource={events} rowKey="_id">
+              <Table dataSource={events} rowKey="_id" pagination={{ pageSize: 5 }} scroll={{ x: 'max-content' }}>
                 <Table.Column title="Title" dataIndex="title" key="title" />
                 <Table.Column title="Description" dataIndex="description" key="description" />
                 <Table.Column
@@ -159,9 +163,8 @@ const TpoDashboard = () => {
                         <Link to={`/tpo-events/${record._id}`}>View</Link>
                       </Button>
                       <Button type="link" onClick={() => window.open(`/tpo-applications/${record._id}`, '_blank')}>
-  View Applications
-</Button>
-
+                        View Applications
+                      </Button>
                       <Button type="link" danger onClick={() => handleEventDelete(record._id)}>
                         Delete
                       </Button>
