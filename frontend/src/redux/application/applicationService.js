@@ -4,6 +4,7 @@ import config from '../api-link/config';
 // Fetch all applications for a specific job
 export const fetchApplicationsForJob = async (jobId) => {
     const response = await axios.get(`${config.API_URL}/api/v1/hr/all-application/${jobId}`);
+    console.log("response",response)
     return response.data;
 };
 

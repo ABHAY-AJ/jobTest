@@ -1,41 +1,50 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Layout, Table, Button, Typography, message, Row, Col } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Layout, Table, Button, Form, Select, Typography, message, Row, Col } from 'antd';
 import { useParams, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchTpoApplications, reviewTpoApplication } from '../../../redux/tpo/studentApplications/studentTpoApplication';
 
 const { Content } = Layout;
 const { Title } = Typography;
+const { Option } = Select;
 
 const TpoApplicationsPage = () => {
   const { id } = useParams(); // Get job, internship, or event ID from route params
   const dispatch = useDispatch();
-
-  // Access the state from Redux
+  const [applicationsLocal, setApplicationsLocal] = useState([]); // Local state for applications
+  const [selectedApplicationId, setSelectedApplicationId] = useState(null); // Track selected application
+  const [reviewForm] = Form.useForm(); // Form instance for review
   const { tpplications, loading, error } = useSelector((state) => state.tpplications);
 
-  console.log("appp", tpplications);
-
-  // Fetch tpplications when component is mounted
+  // Fetch applications when component is mounted
   useEffect(() => {
-    console.log("Dispatching fetchTpoApplications with ID:", id);
-    dispatch(fetchTpoApplications(id)).then((result) => {
-      console.log("FetchTpoApplications Result: ", result);
+    dispatch(fetchTpoApplications(id)).unwrap().then((fetchedApplications) => {
+      setApplicationsLocal(fetchedApplications); // Set local applications state
     });
   }, [dispatch, id]);
 
-  // Handle reviewing the application
-  const handleReview = async (applicationId, reviewData) => {
+  // Handle review status change and optimistically update local state
+  const handleReviewStatusChange = async () => {
     try {
-      await dispatch(reviewTpoApplication({ applicationId, reviewData })).unwrap();
-      message.success('Application reviewed successfully');
+      const { status } = reviewForm.getFieldsValue(); // Get selected status from form
+      await dispatch(reviewTpoApplication({ applicationId: selectedApplicationId, reviewData: { status } })).unwrap();
+      console.log("selectedApplicationId",selectedApplicationId)
+
+      // Optimistically update local applications
+      setApplicationsLocal((prevApplications) =>
+        prevApplications.map((application) =>
+          application._id === selectedApplicationId ? { ...application, status } : application
+        )
+      );
+
+      message.success('Application status updated successfully');
     } catch (error) {
-      message.error(`Failed to review application: ${error.message}`);
+      message.error(`Failed to update application status: ${error.message}`);
     }
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading tpplications: {error}</p>;
+  if (error) return <p>Error loading applications: {error}</p>;
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -45,38 +54,51 @@ const TpoApplicationsPage = () => {
         {/* Responsive layout using Row and Col */}
         <Row gutter={16}>
           <Col xs={24} md={24}>
-            {/* Applications Table */}
             <Table
-              dataSource={tpplications}
+              dataSource={applicationsLocal} // Use local state for data source
               rowKey="_id"
+              rowClassName="custom-hover-row"
+              onRow={(record) => ({
+                onClick: () => {
+                  setSelectedApplicationId(record._id); // Set selected application ID
+                  reviewForm.setFieldsValue({ status: record.status }); // Set form status value based on selected application
+                },
+              })}
               pagination={{ pageSize: 5 }} // Optional: Adjust pagination for better readability
               scroll={{ x: '100%' }} // Enable horizontal scrolling
             >
               <Table.Column
-                title="Name"
+                title="Student Name"
                 dataIndex={['student', 'name']}
-                key="student.name"
-                render={(text, record) => (
-                  <Link to={`/student/${record.student._id}`}>{text}</Link>
+                key="studentName"
+                render={(name, record) => (
+                  <Button type="link">
+                    <Link to={`/student/${record.student._id}`}>{name}</Link>
+                  </Button>
                 )}
               />
               <Table.Column title="Email" dataIndex={['student', 'email']} key="student.email" />
               <Table.Column title="Score" dataIndex="score" key="score" />
-              <Table.Column
-                title="Actions"
-                key="actions"
-                render={(text, record) => (
-                  <span>
-                    <Button type="link" onClick={() => handleReview(record._id, { status: 'Accepted' })}>
-                      Accept
-                    </Button>
-                    <Button type="link" onClick={() => handleReview(record._id, { status: 'Rejected' })} danger>
-                      Reject
-                    </Button>
-                  </span>
-                )}
-              />
+              <Table.Column title="Status" dataIndex="status" key="status" />
             </Table>
+
+            {/* Conditional rendering for the review form */}
+            {selectedApplicationId && (
+              <Form form={reviewForm} layout="vertical" style={{ marginTop: '20px' }}>
+                <Form.Item name="status" label="Review Status">
+                  <Select placeholder="Select a status">
+                    <Option value="Pending">Pending</Option>
+                    <Option value="Accepted">Accepted</Option>
+                    <Option value="Rejected">Rejected</Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" onClick={handleReviewStatusChange}>
+                    Update Status
+                  </Button>
+                </Form.Item>
+              </Form>
+            )}
           </Col>
         </Row>
       </Content>

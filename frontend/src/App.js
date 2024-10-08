@@ -44,6 +44,9 @@ import EditTpoInternshipPage from './pages/tpo-pages/internship/EditTpoInternshi
 import EditTpoEventPage from "./pages/tpo-pages/event/EditTpoEventPage";
 import TpoEventDetail from './pages/TpoEventDetail';
 import TpoApplicationsPage from './pages/tpo-pages/applications/TpoApplicationsPage';
+import ApplicationsPage from './pages/hr-pages/ApplicationsPage/ApplicationsPage';
+import Chat from "./pages/Chat/Chat"
+
 
 const { Header, Sider, Content } = Layout;
 
@@ -251,6 +254,7 @@ const App = () => {
             <Route path="/internships/:id" element={<PrivateRoute component={InternshipDetail} />} />
             <Route path="/profile" element={<PrivateRoute component={Profile} />} />
             <Route path="/dashboard" element={<PrivateRoute component={Dashboard} />} />
+            <Route path="/applications/:jobId" element={<PrivateRoute component={ApplicationsPage} />} />
             <Route path="/student-dashboard" element={<PrivateRoute component={StudentDashboard} />} />
             <Route path="/create-job" element={<PrivateRoute component={CreateJob} />} />
             <Route path="/edit-job/:id" element={<PrivateRoute component={EditJob} />} />
@@ -258,6 +262,8 @@ const App = () => {
             <Route path="/edit-internship/:id" element={<PrivateRoute component={EditTpoInternshipPage} />} />
             <Route path="/tpo-dashboard" element={<PrivateRoute component={TpoDashboard} />} />
             <Route path="/tpo-jobs" element={<PrivateRoute component={AllTpoJobs} />} />
+            <Route path="/create-tpo-job" element={<PrivateRoute component={PostTpoJob} />} />
+            <Route path="/edit-tpo-job/:id" element={<PrivateRoute component={EditTpoJobPage} />} />
             <Route path="/tpo-jobs/:id" element={<PrivateRoute component={TpoJobDetail} />} />
             <Route path="/tpo-internships" element={<PrivateRoute component={TpoInternshipsPage} />} />
             <Route path="/tpo-internships/:id" element={<PrivateRoute component={TpoInternshipDetail} />} />
@@ -267,6 +273,11 @@ const App = () => {
             <Route path="/edit-tpo-event/:id" element={<PrivateRoute component={EditTpoEventPage} />} />
             <Route path="/tpo-applications/:id" element={<PrivateRoute component={TpoApplicationsPage} />} />
             <Route path="/student/:studentId" element={<PrivateRoute component={StudentProfile} />} />
+
+
+            <Route path="/chat" element={<PrivateRoute component={Chat} />} />
+
+
           </Routes>
         </Content>
       </Layout>

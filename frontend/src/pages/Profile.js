@@ -1,33 +1,53 @@
-// src/pages/Profile.js
-import React, { useEffect, useState } from 'react';
-import { fetchUserProfile } from '../services/api';
-import { Container, Card } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProfile } from '../redux/user-slices/userSlice'; // Adjust the import path based on your structure
+import { Card, Col, Row, Typography } from 'antd';
+
+const { Title, Text } = Typography;
 
 const Profile = () => {
-  const [profile, setProfile] = useState(null);
+  const dispatch = useDispatch();
+  const { userInfo, loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
-    const getProfile = async () => {
-      const response = await fetchUserProfile();
-      setProfile(response.data);
-    };
-    getProfile();
-  }, []);
+    dispatch(getProfile());
+  }, [dispatch]);
 
-  if (!profile) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!userInfo) return <p>No profile data available.</p>;
 
   return (
-    <Container>
-      <Card className="my-4">
-        <Card.Body>
-          <Card.Title>{profile.name}</Card.Title>
-          <Card.Text>Email: {profile.email}</Card.Text>
-          <Card.Text>Skills: {profile.skills.join(', ')}</Card.Text>
-          <Card.Text>Experience: {profile.experience} years</Card.Text>
-          <Card.Text>Education: {profile.education}</Card.Text>
-        </Card.Body>
+    <div style={{ padding: '20px' }}>
+      <Card title="User Profile" style={{ width: 600, margin: '0 auto' }}>
+        <Title level={4}>{userInfo.name}</Title>
+        <Text>Email: {userInfo.email}</Text>
+        <Row gutter={16} style={{ marginTop: '16px' }}>
+          <Col span={12}>
+            <Text>Skills: {userInfo.profile.skills.join(', ')}</Text>
+          </Col>
+          <Col span={12}>
+            <Text>Experience: {userInfo.profile.experience} years</Text>
+          </Col>
+        </Row>
+        <Row gutter={16} style={{ marginTop: '8px' }}>
+          <Col span={12}>
+            <Text>Education: {userInfo.profile.education}</Text>
+          </Col>
+          <Col span={12}>
+            <Text>Location: {userInfo.profile.location}</Text>
+          </Col>
+        </Row>
+        <Row gutter={16} style={{ marginTop: '8px' }}>
+          <Col span={12}>
+            <Text>Date of Birth: {new Date(userInfo.profile.dateOfBirth).toLocaleDateString()}</Text>
+          </Col>
+          <Col span={12}>
+            <Text>Academic Percentage: {userInfo.profile.academicPercentage}%</Text>
+          </Col>
+        </Row>
       </Card>
-    </Container>
+    </div>
   );
 };
 
