@@ -30,8 +30,6 @@ exports.filterTpoApplications = async (req, res) => {
 exports.reviewTpoApplication = async (req, res) => {
     try {
         const application = await tpoApplication.findByIdAndUpdate(req.params.applicationId, req.body, { new: true });
-        console.log("params",req.params.applicationId);
-        console.log("body",req.body)
         if (!application) return res.status(404).json({ success: false, message: 'Application not found' });
         res.status(200).json({ success: true, data: application });
     } catch (error) {

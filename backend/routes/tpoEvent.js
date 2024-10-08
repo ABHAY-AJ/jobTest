@@ -10,7 +10,7 @@ router.get('/tpo-events/hr', protect, authorize('TPO'), getAllEventsByTPO);
 router.get('/tpo-event/:id',protect, getTpoEventById);
 
 router.post('/tpo-events',protect,authorize('TPO'),createTpoEvent);
-router.put('/tpo-events/:id', protect, authorize('TPO','HR'), updateTpoEvent);
+router.put('/tpo-events/:id', protect, authorize('TPO'), updateTpoEvent);
 router.delete('/tpo-events/:id', protect, authorize('TPO'), deleteTpoEvent);
 
 
