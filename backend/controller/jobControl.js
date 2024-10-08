@@ -49,8 +49,15 @@ exports.getJobById = async (req, res) => {
 exports.updateJob = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);
-        if (!job) return res.status(404).json({ success: false, message: 'job not found' });
+        if (!job) return res.status(404).json({ success: false, message: 'Job not found' });
 
+        // Check if the user is authorized to update the job
+        const userId = req.user._id;  // Assuming userId is set in req.user
+        if (!job.postedBy.equals(userId) && !job.authorizedHRs.includes(userId)) {
+            return res.status(403).json({ success: false, message: 'You are not authorized to update this job' });
+        }
+
+        // Proceed with job update if within allowed time
         const createdAt = new Date(job.createdAt);
         const now = new Date();
         const timeDifference = (now - createdAt) / (1000 * 60 * 60); // Convert milliseconds to hours

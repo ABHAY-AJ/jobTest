@@ -19,10 +19,10 @@ const internshipSchema = new mongoose.Schema({
     duration: {
       type: String,
       required:true
-    }
-    ,
+    },
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to HR
-    tpoApplications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tpoApplication' }]
+    tpoApplications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tpoApplication' }],
+    authorizedHRs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
   },{timestamps:true});
 
   module.exports = mongoose.model('tpoInternship', internshipSchema);

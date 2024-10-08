@@ -20,6 +20,8 @@ const userRoutes = require('./routes/user');
 const hrRoute = require("./routes/hr");
 const tpoEventRoutes = require('./routes/tpoEvent');
 const tpoRoute = require("./routes/tpo");
+const invitationRoutes = require("./routes/invitationRoutes")
+const chatRoute = require("./routes/chatRoute")
 
 app.use('/api/v1', jobRoutes);
 app.use('/api/v1', tpoJobRoutes);
@@ -30,14 +32,19 @@ app.use('/api/v1', studentRoutes);
 app.use('/api/v1', hrRoute);
 app.use('/api/v1',tpoRoute);
 app.use('/api/auth', userRoutes);
+app.use('/api/v1/invitations',invitationRoutes)
+app.use('/api/v1',chatRoute)
 
 
-app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-// Serve the React app for any unmatched routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-});
+
+
+// app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// // Serve the React app for any unmatched routes
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+// });
 
 
 const PORT = process.env.PORT || 5000;

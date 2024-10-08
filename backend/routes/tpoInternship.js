@@ -11,7 +11,7 @@ router.get('/tpo-internships/hr', protect, authorize('TPO'), getAllInternshipsBy
 router.get('/tpo-internship/:id',protect,getTpoInternshipById);
 
 router.post('/tpo-internships', protect, authorize('TPO'), createTpoInternship);
-router.put('/tpo-internships/:internshipId', protect, authorize('TPO'), updateTpoInternship);
+router.put('/tpo-internships/:internshipId', protect, authorize('TPO','HR'), updateTpoInternship);
 router.delete('/tpo-internships/:id', protect, authorize('TPO'), deleteTpoInternship);
 
 router.post('/tpo-internships/:id/apply',protect,authorize("Student"), applyForTpoInternship);

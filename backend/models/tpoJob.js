@@ -17,7 +17,8 @@ const jobSchema = new mongoose.Schema({
       // Additional criteria...
     },
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to HR
-    tpoApplications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tpoApplication' }]
+    tpoApplications: [{ type: mongoose.Schema.Types.ObjectId, ref: 'tpoApplication' }],
+    authorizedHRs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
   },{timestamps:true});
   
  
