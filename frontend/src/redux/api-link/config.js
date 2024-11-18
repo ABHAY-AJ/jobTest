@@ -1,5 +1,5 @@
 const config = {
-    API_URL:'http://stackpop.onrender.com'
+    API_URL:'https://stackpop.onrender.com'
   };
   
   export default config;
