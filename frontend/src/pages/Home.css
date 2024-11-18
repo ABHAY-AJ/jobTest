@@ -1,0 +1,87 @@
+.home-container {
+  text-align: center;
+  padding: 50px;
+  background: #f0f2f5;
+}
+
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel .carousel-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.carousel .ant-card {
+  margin: 0 8px;
+}
+
+.carousel .ant-card-cover img {
+  width: 100%;
+}
+
+.welcome-section {
+  margin-top: 20px;
+}
+
+.view-jobs-btn {
+  margin-right: 10px;
+}
+
+.featured-jobs {
+  margin-top: 50px;
+}
+
+.testimonials-section {
+  margin-top: 50px;
+  background: #fff;
+  padding: 20px;
+}
+
+/* Small screens (for mobile and tablet) */
+@media only screen and (max-width: 768px) {
+  .home-container {
+    padding: 20px;
+  }
+
+  .carousel-container {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .welcome-section {
+    margin-top: 10px;
+  }
+
+  .featured-jobs,
+  .testimonials-section {
+    margin-top: 30px;
+  }
+}
+
+/* For large screens (desktops) */
+@media only screen and (min-width: 769px) {
+  .carousel-container {
+    width: 50%; /* Make the carousel smaller on large screens */
+    margin: 0 auto; /* Center the carousel */
+  }
+
+  .carousel .ant-card-cover img {
+    height: 250px; /* Set a fixed height for images on large screens */
+    object-fit: cover;
+  }
+
+  .welcome-section {
+    margin-top: 30px;
+  }
+
+  .featured-jobs {
+    margin-top: 60px;
+  }
+
+  .testimonials-section {
+    margin-top: 60px;
+  }
+}
