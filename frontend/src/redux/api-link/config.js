@@ -1,5 +1,5 @@
 const config = {
-    API_URL:'http://localhost:5000'
+    API_URL:'https://jobtest-f8tx.onrender.com'
   };
   
   export default config;
